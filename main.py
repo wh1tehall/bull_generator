@@ -1,0 +1,50 @@
+import re
+import json
+import collections
+
+class node:
+    desc=[]
+
+def makeNetwork(filename):
+    with open(filename) as f:
+        content = f.read()
+        pair_list = getPairs(content)
+        grouped = groupByKeys(pair_list) #outputs {'word' : [list, of, all, found, next, words]}
+        print grouped
+        counted = countKeys(grouped) #outputs {'word' : [ {'another_word' : 'counted_appearances'}]}
+        return counted
+
+def groupByKeys(inp):
+    output={}
+    for pair in inp:
+        tmp=[]
+        for p in inp:
+            if p.has_key(pair.keys()[0]):
+                tmp.append(p[pair.keys()[0]])
+        output.update({pair.keys()[0] : tmp})
+    return output
+
+def countKeys(inp):
+    output={}
+    for item in inp.keys():
+        counted=collections.Counter(inp[item])
+        output.update({item : counted})
+    return output
+
+def getPairs(inp):
+    stack=[]
+    lines = json.loads(inp)
+    for line in lines:
+        words=line["quote"].split(" ")
+        for i in range(len(words)):
+            if (i+1)<len(words):
+                stack.append({words[i] : words[i+1]})
+            else:
+                stack.append({words[i] : None})
+    return stack
+
+
+
+network = makeNetwork('/home/whiethall/PycharmProjects/3city-comment-gather/project3city_comment_gather/syf2.json')
+with open('./network2.json','w') as output_file:
+    output_file.write(json.dumps(network))
