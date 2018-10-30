@@ -1,4 +1,4 @@
-import re
+import re,sys
 import json
 import collections
 
@@ -45,6 +45,6 @@ def getPairs(inp):
 
 
 
-network = makeNetwork('/home/whiethall/PycharmProjects/3city-comment-gather/project3city_comment_gather/syf2.json')
-with open('./network2.json','w') as output_file:
+network = makeNetwork(sys.argv[1])
+with open(sys.argv[2],'w') as output_file:
     output_file.write(json.dumps(network))

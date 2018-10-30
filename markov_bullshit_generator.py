@@ -1,5 +1,6 @@
 import json
 import random
+import sys
 
 def impNetwork(inp):
     with open(inp) as f:
@@ -25,11 +26,10 @@ def selectNextWord(net,word):
     else:
         return None
 
-network=impNetwork('network2.json')
+network=impNetwork(sys.argv[1])
 starting_word=selectRandomWord(network)
 words=[starting_word]
 while words[-1]!=None:
     words.append(selectNextWord(network,words[-1]))
 
 print " ".join(words[:-1])
-
