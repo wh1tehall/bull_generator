@@ -1,35 +1,43 @@
 import json
 import random
 import sys
+import redis
 
-def impNetwork(inp):
-    with open(inp) as f:
-        return json.loads(f.read())
+class network:
 
-def selectRandomWord(net):
-    keys=net.keys()
-    return keys[random.randrange(len(keys))]
+    words=[]
+    r = None
 
-def selectNextWord(net,word):
-    if net.has_key(word):
-        candidates=net[word]
-        keys=candidates.keys()
-        den=0
-        for key in keys:
-            den+=candidates[key]
-        i=random.randrange(den)
-        den=0
-        for key in keys:
-            den+=candidates[key]
-            if den>i:
-                return key
-    else:
-        return None
+    def __init__(self):
+        self.r = redis.StrictRedis(host='localhost', port=6379, db=0)
+        self.words=list(self.r.scan_iter())
+        print self.words
 
-network=impNetwork(sys.argv[1])
-starting_word=selectRandomWord(network)
+    def selectRandomWord(self):
+        return self.words[random.randrange(len(self.words))]
+
+    def selectNextWord(self,word):
+
+        redisreturn = self.r.get(word)
+        if redisreturn!=None:
+            candidates=json.loads(self.r.get(word))
+            keys=candidates.keys()
+            den=0
+            for key in keys:
+                den+=candidates[key]
+            i=random.randrange(den)
+            den=0
+            for key in keys:
+                den+=candidates[key]
+                if den>i:
+                    return key
+        else:
+            return None
+
+net=network()
+starting_word=net.selectRandomWord()
 words=[starting_word]
 while words[-1]!=None:
-    words.append(selectNextWord(network,words[-1]))
+    words.append(net.selectNextWord(words[-1]))
 
-print " ".join(words[:-1])
+print " ".join(words[:-2])

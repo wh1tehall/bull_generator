@@ -1,6 +1,7 @@
 import re,sys
 import json
 import collections
+import redis
 
 class node:
     desc=[]
@@ -46,5 +47,6 @@ def getPairs(inp):
 
 
 network = makeNetwork(sys.argv[1])
-with open(sys.argv[2],'w') as output_file:
-    output_file.write(json.dumps(network))
+r = redis.StrictRedis(host='localhost', port=6379, db=0)
+for net in network:
+    r.set(net,json.dumps(network[net]))
