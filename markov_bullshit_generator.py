@@ -12,7 +12,7 @@ class network:
     def __init__(self):
         self.r = redis.StrictRedis(host='localhost', port=6379, db=0)
         for w in self.r.scan_iter():
-            self.words.append(w.decode())
+            self.words.append(w.decode('utf-8'))
 
     def selectRandomWord(self):
         return self.words[random.randrange(len(self.words))]
@@ -41,6 +41,3 @@ class network:
         while phrase[-1]!=None:
             phrase.append(self.selectNextWord(phrase[-1]))
         return u" ".join(phrase[:-2])
-
-net=network()
-print(net.generatePhrase())
