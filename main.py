@@ -47,7 +47,9 @@ def getPairs(inp):
 
 
 network = makeNetwork(sys.argv[1])
-addr=os.environ["REDIS_URL"].split(":")
-r = redis.StrictRedis(host=":".join(addr[:-1]),port=addr[-1], db=0)
+#addr=os.environ["REDIS_URL"].split(":")
+#hostname=":".join(addr[:-1])
+#print(hostname)
+r = redis.from_url(os.environ.get("REDIS_URL"))
 for net in network:
-    r.set(net,json.dumps(network[net]),ex=86400) #setting keys to expire in a day
+    r.set(str(net),str(json.dumps(network[net])),ex=86400) #setting keys to expire in a day
