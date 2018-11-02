@@ -7,3 +7,6 @@ app = Flask(__name__)
 def hello():
     n=network()
     return n.generatePhrase()
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0')
