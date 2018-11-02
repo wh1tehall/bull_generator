@@ -50,6 +50,6 @@ network = makeNetwork(sys.argv[1])
 #addr=os.environ["REDIS_URL"].split(":")
 #hostname=":".join(addr[:-1])
 #print(hostname)
-r = redis.from_url(os.environ.get("REDIS_URL"))
+r = redis.from_url(os.environ.get("REDIS_URL"),db=0)
 for net in network:
     r.set(str(net),str(json.dumps(network[net])),ex=86400) #setting keys to expire in a day

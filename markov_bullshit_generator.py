@@ -10,7 +10,7 @@ class network:
     r = None
 
     def __init__(self):
-        self.r = redis.from_url(os.environ.get("REDIS_URL"))
+        self.r = redis.from_url(os.environ.get("REDIS_URL"),db=0)
         for w in self.r.scan_iter():
             self.words.append(w.decode('utf-8'))
 
