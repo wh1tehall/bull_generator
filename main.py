@@ -1,4 +1,4 @@
-import re,sys
+import re,sys,os
 import json
 import collections
 import redis
@@ -11,7 +11,6 @@ def makeNetwork(filename):
         content = f.read()
         pair_list = getPairs(content)
         grouped = groupByKeys(pair_list) #outputs {'word' : [list, of, all, found, next, words]}
-        print grouped
         counted = countKeys(grouped) #outputs {'word' : [ {'another_word' : 'counted_appearances'}]}
         return counted
 
@@ -20,9 +19,9 @@ def groupByKeys(inp):
     for pair in inp:
         tmp=[]
         for p in inp:
-            if p.has_key(pair.keys()[0]):
-                tmp.append(p[pair.keys()[0]])
-        output.update({pair.keys()[0] : tmp})
+            if list(pair.keys())[0] in p:
+                tmp.append(p[list(pair.keys())[0]])
+        output.update({list(pair.keys())[0] : tmp})
     return output
 
 def countKeys(inp):
