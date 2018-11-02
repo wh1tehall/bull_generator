@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 import json
 import random
-import sys
+import sys,os
 import redis
 
 class network:
@@ -10,8 +11,8 @@ class network:
 
     def __init__(self):
         self.r = redis.StrictRedis(host='localhost', port=6379, db=0)
-        self.words=list(self.r.scan_iter())
-        print self.words
+        for w in self.r.scan_iter():
+            self.words.append(w.decode())
 
     def selectRandomWord(self):
         return self.words[random.randrange(len(self.words))]
@@ -34,10 +35,12 @@ class network:
         else:
             return None
 
-net=network()
-starting_word=net.selectRandomWord()
-words=[starting_word]
-while words[-1]!=None:
-    words.append(net.selectNextWord(words[-1]))
+    def generatePhrase(self):
+        starting_word=self.selectRandomWord()
+        phrase=[starting_word]
+        while phrase[-1]!=None:
+            phrase.append(self.selectNextWord(phrase[-1]))
+        return u" ".join(phrase[:-2])
 
-print " ".join(words[:-2])
+net=network()
+print(net.generatePhrase())
