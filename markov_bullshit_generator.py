@@ -10,7 +10,8 @@ class network:
     r = None
 
     def __init__(self):
-        self.r = redis.StrictRedis(host='localhost', port=6379, db=0)
+        addr=os.environ["REDIS_URL"].split(":")
+        self.r = redis.StrictRedis(host=":".join(addr[:-1]),port=addr[-1], db=0)
         for w in self.r.scan_iter():
             self.words.append(w.decode('utf-8'))
 
