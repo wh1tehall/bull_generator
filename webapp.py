@@ -15,13 +15,15 @@ def hello():
     T = Template(template)
     return T.render(phrase=n.generatePhrase())
 
-@app.route("/upvote")
+@app.route("/upvote",methods=['POST'])
 def getUpvote():
     r = redis.from_url(os.environ.get("REDIS_URL"),db=1)
+    for a in request.form:
+        print(a)
     r.incr(request.form.get("quote"))
     return redirect("/")
 
-@app.route("/downvote")
+@app.route("/downvote",methods=['POST'])
 def getDownvote():
     r = redis.from_url(os.environ.get("REDIS_URL"),db=1)
     r.decr(request.form.get("quote"))

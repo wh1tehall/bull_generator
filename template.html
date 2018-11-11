@@ -1,12 +1,12 @@
 <body>
   <a href="/best">Najlepsze</a>
-  Beton na dziś: <l>{{ phrase }}</l>
-  <form action="/upvote">
-    <input type=text value={{phrase}} style="display:none">
+  Beton na dziś: <div>{{ phrase }}</div>
+  <form action="/upvote" method="POST">
+    <input type=text name=quote value="{{ phrase }}" style="display:none">
     <input type=submit value="up">
   </form>
-  <form action="/downvote">
-    <input type=text value={{phrase}} style="display:none">
+  <form action="/downvote" method="POST">
+    <input type=text name=quote value="{{ phrase }}" style="display:none">
     <input type=submit value="down">
   </form>
 </body>
